@@ -22,7 +22,7 @@ fn read_two_i16s() -> (i16, i16) {
         eprintln!("Error: Could not read `number 1` value: {}.", e);
         std::process::exit(1);
     };
-    let number1 = parse_i16(number1_input);
+    let number1 = parse_i16_from_input(number1_input);
 
     let mut number2_input = String::new();
     print!("Integer 2: ");
@@ -31,19 +31,20 @@ fn read_two_i16s() -> (i16, i16) {
         eprintln!("Error: Could not read `number 2` value: {}.", e);
         std::process::exit(1);
     };
-    let number2 = parse_i16(number2_input);
+    let number2 = parse_i16_from_input(number2_input);
     (number1, number2)
 }
 
-fn parse_i16(number_str : String) -> i16 {
-    match number_str.trim().parse::<i64>() {
-        Ok(x) if x < (MIN_ALLOWED_VALUE as i64) || x > (MAX_ALLOWED_VALUE as i64) => {
+fn parse_i16_from_input(number_str : String) -> i16 {
+    match number_str.trim().parse::<i16>() {
+        Ok(x) if x < MIN_ALLOWED_VALUE || x > MAX_ALLOWED_VALUE => {
             eprintln!("Error: Please enter a value between {} and {}.",
                 MIN_ALLOWED_VALUE, MAX_ALLOWED_VALUE);
             std::process::exit(1);
         },
         Err(_) => {
-            eprintln!("Error: Unrecognized number (too big?).");
+            eprintln!("Error: Please enter a valid integer between {} and {}.",
+                MIN_ALLOWED_VALUE, MAX_ALLOWED_VALUE);
             std::process::exit(1);
         },
         Ok(n) => n as i16
