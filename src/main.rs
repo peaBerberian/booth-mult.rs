@@ -7,6 +7,39 @@ const MAX_ALLOWED_VALUE : i16 = std::i16::MAX;
 // Equal to: number of bytes for multiplicand + number of bytes for multiplier + 1
 const P_NUMBER_BYTES : u8 = 16 + 16 + 1;
 
+/// Simple implementation of Booth's multiplication algorithm.
+fn booth_mult(number1 : i16, number2 : i16) -> i16 {
+    if number1 == 0 || number2 == 0 {
+        return 0;
+    }
+
+    // Cast those to as u64s by just adding 48 `0` in front of it.
+    // We first cast it to an u16 as we don't want to expand's the two's
+    // complement here, we just want to keep the least significant bits as is
+    // and fill the rest with 0.
+    let number1_u64 = number1 as u16 as u64;
+    let number2_u64 = number2 as u16 as u64;
+
+    // I felt that just doing -number1 was cheating here as we relied to much on
+    // Rust there, so I calculate the opposite of number1 in a much more
+    // rudimentary manner
+    let minus_number1_u64 = !((number1 as u16) - 1) as u64;
+
+    let a = number1_u64 << (16 + 1);
+    let s = minus_number1_u64 << (16 + 1);
+    let mut p = number2_u64 << 1;
+
+    for _ in 0..16 {
+        let val = match p & 0b11 {
+            0b01 => (p + a) & ((1 << P_NUMBER_BYTES) - 1),
+            0b10 => (p + s) & ((1 << P_NUMBER_BYTES) - 1),
+            _ => p,
+        };
+        p = val >> 1;
+    }
+    (p >> 1) as i16
+}
+
 fn main() {
     let (number1, number2) = read_two_i16s();
     println!("Result: {}", booth_mult(number1, number2));
@@ -46,39 +79,6 @@ fn read_i16_from_input() -> i16 {
         },
         Ok(n) => n as i16
     }
-}
-
-/// Simple implementation of Booth's multiplication algorithm.
-fn booth_mult(number1 : i16, number2 : i16) -> i16 {
-    if number1 == 0 || number2 == 0 {
-        return 0;
-    }
-
-    // Cast those to as u64s by just adding 48 `0` in front of it.
-    // We first cast it to an u16 as we don't want to expand's the two's
-    // complement here, we just want to keep the least significant bits as is
-    // and fill the rest with 0.
-    let number1_u64 = number1 as u16 as u64;
-    let number2_u64 = number2 as u16 as u64;
-
-    // I felt that just doing -number1 was cheating here as we relied to much on
-    // Rust there, so I calculate the opposite of number1 in a much more
-    // rudimentary manner
-    let minus_number1_u64 = !((number1 as u16) - 1) as u64;
-
-    let a = number1_u64 << (16 + 1);
-    let s = minus_number1_u64 << (16 + 1);
-    let mut p = number2_u64 << 1;
-
-    for _ in 0..16 {
-        let val = match p & 0b11 {
-            0b01 => (p + a) & ((1 << P_NUMBER_BYTES) - 1),
-            0b10 => (p + s) & ((1 << P_NUMBER_BYTES) - 1),
-            _ => p,
-        };
-        p = val >> 1;
-    }
-    (p >> 1) as i16
 }
 
 #[test]
