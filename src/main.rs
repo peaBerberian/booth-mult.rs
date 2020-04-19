@@ -16,8 +16,12 @@ fn main() {
     // complement here, we just want to keep the least significant bits as is
     // and fill the rest with 0.
     let number1_u64 = number1 as u16 as u64;
-    let minus_number1_u64 = (-number1) as u16 as u64;
     let number2_u64 = number2 as u16 as u64;
+
+    // I felt that just doing -number1 was cheating here as we relied to much on
+    // Rust there, so I calculate the opposite of number1 in a much more
+    // rudimentary manner
+    let minus_number1_u64 = !((number1 as u16) - 1) as u64;
 
     let a = number1_u64 << (16 + 1);
     let s = minus_number1_u64 << (16 + 1);
