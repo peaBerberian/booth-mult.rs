@@ -1,5 +1,8 @@
 use std::io::{self, Write};
 
+const MIN_ALLOWED_VALUE : i64 = (std::i16::MIN + 1) as i64;
+const MAX_ALLOWED_VALUE : i64 = std::i16::MAX as i64;
+
 // Number of bytes under which `p` should be represented.
 // Equal to: number of bytes for multiplicand + number of bytes for multiplier + 1
 const P_NUMBER_BYTES : u8 = 16 + 16 + 1;
@@ -37,19 +40,13 @@ fn main() {
 /// Just print to stderr and exit if an error arised.
 fn read_two_i16s() -> (i16, i16) {
     let mut number1_input = String::new();
-    print!("Integer 1: ");
+    print!("Integer 1 (between {} and {}): ", std::i16::MIN + 1, std::i16::MAX);
     io::stdout().flush().unwrap();
     if let Err(e) = io::stdin().read_line(&mut number1_input) {
         eprintln!("Error: Could not read `number 1` value: {}.", e);
         std::process::exit(1);
     };
-    let number1 : i16 = match number1_input.trim().parse() {
-        Ok(n) => n,
-        Err(_) => {
-            eprintln!("Error: Expected a valid signed 8 bit integer as first argument.");
-            std::process::exit(1);
-        }
-    };
+    let number1 : i16 = parse_i16(number1_input);
 
     let mut number2_input = String::new();
     print!("Integer 2: ");
@@ -58,12 +55,21 @@ fn read_two_i16s() -> (i16, i16) {
         eprintln!("Error: Could not read `number 2` value: {}.", e);
         std::process::exit(1);
     };
-    let number2 : i16 = match number2_input.trim().parse() {
-        Ok(n) => n,
-        Err(_) => {
-            eprintln!("Error: Expected a valid signed 8 bit integer as second argument.");
-            std::process::exit(1);
-        }
-    };
+    let number2 : i16 = parse_i16(number2_input);
     (number1, number2)
+}
+
+fn parse_i16(number_str : String) -> i16 {
+    match number_str.trim().parse::<i64>() {
+        Ok(x) if x < MIN_ALLOWED_VALUE || x > MAX_ALLOWED_VALUE => {
+            eprintln!("Error: Please enter a value between {} and {}.",
+                MIN_ALLOWED_VALUE, MAX_ALLOWED_VALUE);
+            std::process::exit(1);
+        },
+        Err(_) => {
+            eprintln!("Error: Unrecognized number (too big?).");
+            std::process::exit(1);
+        },
+        Ok(n) => n as i16
+    }
 }
