@@ -15,27 +15,24 @@ fn main() {
 /// Try to read to i16 from stdin and returns them.
 /// Just print to stderr and exit if an error arised.
 fn read_two_i16s() -> (i16, i16) {
-    let mut number1_input = String::new();
     print!("Integer 1 (between {} and {}): ", std::i16::MIN + 1, std::i16::MAX);
     io::stdout().flush().unwrap();
-    if let Err(e) = io::stdin().read_line(&mut number1_input) {
-        eprintln!("Error: Could not read `number 1` value: {}.", e);
-        std::process::exit(1);
-    };
-    let number1 = parse_i16_from_input(number1_input);
+    let number1 = read_i16_from_input();
 
-    let mut number2_input = String::new();
-    print!("Integer 2: ");
+    print!("Integer 2 (between {} and {}): ", std::i16::MIN + 1, std::i16::MAX);
     io::stdout().flush().unwrap();
-    if let Err(e) = io::stdin().read_line(&mut number2_input) {
-        eprintln!("Error: Could not read `number 2` value: {}.", e);
-        std::process::exit(1);
-    };
-    let number2 = parse_i16_from_input(number2_input);
+    let number2 = read_i16_from_input();
     (number1, number2)
 }
 
-fn parse_i16_from_input(number_str : String) -> i16 {
+/// Wait for an i16 value to be inputted from stdin and return it.
+/// Print to stderr and exit if something bad happened.
+fn read_i16_from_input() -> i16 {
+    let mut number_str = String::new();
+    if let Err(e) = io::stdin().read_line(&mut number_str) {
+        eprintln!("Error: Could not read this value: {}.", e);
+        std::process::exit(1);
+    };
     match number_str.trim().parse::<i16>() {
         Ok(x) if x < MIN_ALLOWED_VALUE || x > MAX_ALLOWED_VALUE => {
             eprintln!("Error: Please enter a value between {} and {}.",
