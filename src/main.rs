@@ -74,7 +74,6 @@ fn booth_mult(number1 : i16, number2 : i16) -> i16 {
 
     for _ in 0..16 {
         let val = match p & 0b11 {
-            0b00 | 0b11 => p,
             0b01 => (p + a) & ((1 << P_NUMBER_BYTES) - 1),
             0b10 => (p + s) & ((1 << P_NUMBER_BYTES) - 1),
             _ => p,
