@@ -22,7 +22,7 @@ fn read_two_i16s() -> (i16, i16) {
         eprintln!("Error: Could not read `number 1` value: {}.", e);
         std::process::exit(1);
     };
-    let number1 : i16 = parse_i16(number1_input);
+    let number1 = parse_i16(number1_input);
 
     let mut number2_input = String::new();
     print!("Integer 2: ");
@@ -31,7 +31,7 @@ fn read_two_i16s() -> (i16, i16) {
         eprintln!("Error: Could not read `number 2` value: {}.", e);
         std::process::exit(1);
     };
-    let number2 : i16 = parse_i16(number2_input);
+    let number2 = parse_i16(number2_input);
     (number1, number2)
 }
 
