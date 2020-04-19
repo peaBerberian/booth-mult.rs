@@ -52,6 +52,10 @@ fn parse_i16(number_str : String) -> i16 {
 
 /// Simple implementation of Booth's multiplication algorithm.
 fn booth_mult(number1 : i16, number2 : i16) -> i16 {
+    if number1 == 0 || number2 == 0 {
+        return 0;
+    }
+
     // Cast those to as u64s by just adding 48 `0` in front of it.
     // We first cast it to an u16 as we don't want to expand's the two's
     // complement here, we just want to keep the least significant bits as is
