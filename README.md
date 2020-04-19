@@ -1,6 +1,6 @@
 # Booth's multiplication algorithm #############################################
 
-Very simple [Booth's multiplication
+[Booth's multiplication
 algorithm](https://en.wikipedia.org/wiki/Booth%27s_multiplication_algorithm)
 implementation written in Rust.
 
