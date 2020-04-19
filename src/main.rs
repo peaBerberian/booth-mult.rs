@@ -13,10 +13,10 @@ fn booth_mult(number1 : i16, number2 : i16) -> i16 {
         return 0;
     }
 
-    // Cast those to as u64s by just adding 48 `0` in front of it.
-    // We first cast it to an u16 as we don't want to expand's the two's
-    // complement here, we just want to keep the least significant bits as is
-    // and fill the rest with 0.
+    // Cast those as u64s by just adding 48 `0` in front of it.
+    // We first cast it to an u16 as we don't want to set more bits to `1` due
+    // to two's complement here, we just want to keep the least significant bits
+    // as is and fill the rest with 0.
     let number1_u64 = number1 as u16 as u64;
     let number2_u64 = number2 as u16 as u64;
 
