@@ -4,8 +4,8 @@
 algorithm](https://en.wikipedia.org/wiki/Booth%27s_multiplication_algorithm)
 implementation written in Rust.
 
-Take two 16 bit signed integers (values allowed are from -32767 to 32767) and
-multiply them by using bitwise trickery.
+Take two 16-bit signed integers (values allowed are from -32767 to 32767, as
+-32768 is forbidden here) and multiply them by using bitwise trickery.
 
-As the outputed value is also a 16 bits signed integer, it will rapidly overflow
-when the result goes out of its limits.
+:warning: The outputed value is also a 16-bit signed integer, it will overflow
+if the result goes out of the [-32768, 32767] range.
