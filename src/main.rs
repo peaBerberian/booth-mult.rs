@@ -83,3 +83,16 @@ fn booth_mult(number1 : i16, number2 : i16) -> i16 {
     }
     (p >> 1) as i16
 }
+
+#[test]
+fn test_mult() {
+    for i in MIN_ALLOWED_VALUE ..=MAX_ALLOWED_VALUE {
+        for j in MIN_ALLOWED_VALUE ..=MIN_ALLOWED_VALUE {
+            let result : i32 = (i as i32) * (j as i32);
+            if result > (std::i16::MAX as i32) || result < (std::i16::MIN as i32) {
+                break;
+            }
+            assert_eq!(result as i16, booth_mult(i, j));
+        }
+    }
+}
